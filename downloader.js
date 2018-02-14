@@ -40,12 +40,15 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, res
         function run() {
             let item = formatArray.pop();
             let starttime = null;
+            let filname = `namePrefix_${item.resolution}_${item.bitrate}_${item.audioEncoding}_${item.audioBitrate}.${item.container}`;
+            let output = path.resolve(destinationDir, filname);
+            video.pipe(fs.createWriteStream(output));
             let video = ytdl.downloadFromInfo(info, {
                 format: item
             });
             video.once('response', () => {
                 starttime = Date.now();
-                console.log( starttime)
+                console.log(starttime)
             });
             video.on('progress', (chunkLength, downloaded, total) => {
                 const floatDownloaded = downloaded / total;
@@ -57,6 +60,11 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, res
             });
             video.on('end', () => {
                 console.log('\n\n');
+                if (formatArray.length > 0) {
+                    run()
+                } else {
+                    resolve();
+                }
             });
         }
 
@@ -73,7 +81,6 @@ if (process.env.SOLOTEST === 'true') {
                 infoObject.videoFormats[0],
                 infoObject.combinedFormats[0],
             ];
-            let starttime = null;
             multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), () => {
             }, (chunkLength, downloaded, total) => {
             }, () => {
