@@ -14,3 +14,5 @@ config.json
 *.code-workspace
 /testData/Output
 /testData/Output/**
+*.mp4
+*.m4a

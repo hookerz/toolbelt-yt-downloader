@@ -40,12 +40,13 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, res
         function run() {
             let item = formatArray.pop();
             let starttime = null;
-            let filname = `namePrefix_${item.resolution}_${item.bitrate}_${item.audioEncoding}_${item.audioBitrate}.${item.container}`;
+            let filname = `${namePrefix}_${item.resolution}_${item.bitrate}_${item.audioEncoding}_${item.audioBitrate}_${Date.now()}.${item.container}`;
             let output = path.resolve(destinationDir, filname);
-            video.pipe(fs.createWriteStream(output));
+
             let video = ytdl.downloadFromInfo(info, {
                 format: item
             });
+            video.pipe(fs.createWriteStream(output));
             video.once('response', () => {
                 starttime = Date.now();
                 console.log(starttime)
@@ -54,9 +55,11 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, res
                 const floatDownloaded = downloaded / total;
                 const downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
                 console.log(`${(floatDownloaded * 100).toFixed(2)}% downloaded`);
-                console.log(`(${(downloaded / 1024 / 1024).toFixed(2)}MB of ${(total / 1024 / 1024).toFixed(2)}MB)\n`);
+
+                console.log(`(${(downloaded / 1024 / 1024).toFixed(2)}MB of ${(total / 1024 / 1024).toFixed(2)}MB)`);
                 console.log(`running for: ${downloadedMinutes.toFixed(2)}minutes`);
-                console.log(`, estimated time left: ${(downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)}minutes `);
+                console.log(`estimated time left: ${(downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)}minutes `);
+                console.log (' ')
             });
             video.on('end', () => {
                 console.log('\n\n');
@@ -81,9 +84,13 @@ if (process.env.SOLOTEST === 'true') {
                 infoObject.videoFormats[0],
                 infoObject.combinedFormats[0],
             ];
-            multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), () => {
+           return multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), () => {
             }, (chunkLength, downloaded, total) => {
             }, () => {
             });
+        })
+        .then (()=>{
+            console.log ('all files done')
+
         })
 }
