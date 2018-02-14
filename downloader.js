@@ -5,23 +5,32 @@ const fs = require('fs-extra');
 const glob = require('glob');
 const ytdl = require('ytdl-core');
 const del = require('del');
-if (process.env.SOLOTEST !== 'true') {
-    tmp.setGracefulCleanup();
-}
 let main = function (rootDir, logger = console, cwdRoot = process.cwd()) {
     return new Promise((resolve, reject) => {
     })
 };
 let getInfo = function (ytID) {
     return new Promise((resolve, reject) => {
-        ytdl.getInfo(yiID)
+        ytdl.getInfo(ytID)
             .then(info => {
-                console.log(info);
+                //console.log(info);
                 let ret = {};
-                ret.audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
-                ret.videoFormats = ytdl.filterFormats(info.formats, 'videoonly');
-                ret.combinedFormats = ytdl.filterFormats(info.formats, 'audioandvideo');
-                resolve(  ret )
+                ret.audioFormats = function () {
+                    return _.filter(ytdl.filterFormats(info.formats, 'audioonly'), function (item) {
+                        return item.audioEncoding === 'aac';
+                    })
+                }();
+                ret.videoFormats = function () {
+                    return _.filter(ytdl.filterFormats(info.formats, 'videoonly'), function (item) {
+                        return item.encoding === 'H.264';
+                    })
+                }();
+                ret.combinedFormats = function () {
+                    return _.filter(ytdl.filterFormats(info.formats, 'audioandvideo'), function (item) {
+                        return item.encoding === 'H.264';
+                    })
+                }();
+                resolve(ret)
             })
     })
 };
