@@ -15,6 +15,7 @@ let getInfo = function (ytID) {
             .then(info => {
                 //console.log(info);
                 let ret = {};
+                ret.metaData = info;
                 ret.audioFormats = function () {
                     return _.filter(ytdl.filterFormats(info.formats, 'audioonly'), function (item) {
                         return item.audioEncoding === 'aac';
@@ -34,8 +35,48 @@ let getInfo = function (ytID) {
             })
     })
 };
+let multiDownload = function (info, namePrefix, formatArray, destinationDir, responseCallback, progressCallback, videoEndCallback) {
+    return new Promise((resolve, reject) => {
+        function run() {
+            let item = formatArray.pop();
+            let starttime = null;
+            let video = ytdl.downloadFromInfo(info, {
+                format: item
+            });
+            video.once('response', () => {
+                starttime = Date.now();
+                console.log( starttime)
+            });
+            video.on('progress', (chunkLength, downloaded, total) => {
+                const floatDownloaded = downloaded / total;
+                const downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
+                console.log(`${(floatDownloaded * 100).toFixed(2)}% downloaded`);
+                console.log(`(${(downloaded / 1024 / 1024).toFixed(2)}MB of ${(total / 1024 / 1024).toFixed(2)}MB)\n`);
+                console.log(`running for: ${downloadedMinutes.toFixed(2)}minutes`);
+                console.log(`, estimated time left: ${(downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)}minutes `);
+            });
+            video.on('end', () => {
+                console.log('\n\n');
+            });
+        }
+
+        run();
+    })
+};
 module.exports = main;
 if (process.env.SOLOTEST === 'true') {
     console.log('!!! HELLO WORLD');
     getInfo('YE7VzlLtp-4')
+        .then(infoObject => {
+            let forArray = [
+                infoObject.audioFormats[0],
+                infoObject.videoFormats[0],
+                infoObject.combinedFormats[0],
+            ];
+            let starttime = null;
+            multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), () => {
+            }, (chunkLength, downloaded, total) => {
+            }, () => {
+            });
+        })
 }
