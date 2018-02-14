@@ -1,0 +1,15 @@
+.idea
+.tmp
+.sass-cache
+.vagrant
+dist
+node_modules
+bower_components
+config.json
+*.pyc
+*_.json
+*_.txt
+**/*_.txt
+
+/testData/Output
+/testData/Output/**
