@@ -1,8 +1,8 @@
 {
   "name": "toolbelt-static-html5-wrapper",
-  "title": "DCM Static Wrapper",
+  "title": "YouTube Video Downloader",
   "version": "1.0.1",
-  "description": "Wraps Retina Images in HTML5 DCM wrappers",
+  "description": "Helps Download Videos From YouTube",
   "main": "index.html",
   "dependencies": {
     "del": "^3.0.0",

@@ -74,7 +74,13 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, res
         run();
     })
 };
-module.exports = main;
+module.exports = {
+
+    getInfo:getInfo,
+    multiDownload:multiDownload,
+    ytdl:ytdl
+
+};
 if (process.env.SOLOTEST === 'true') {
     console.log('!!! HELLO WORLD');
     getInfo('YE7VzlLtp-4')
