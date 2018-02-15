@@ -23,6 +23,37 @@
     color: black;
 
   }
+  .container {
+      display: grid;
+      grid-template-columns: 33% 33% 33%;
+      grid-template-rows: 100%;
+      min-height: 300px;
+      width: 100%;
+      background-color: white;
+      grid-column-gap: 5px;
+      grid-row-gap: 5px;
+      justify-items: center;
+      align-items:start;
+  }
+  .item-1 {
+      grid-column-start: 1;
+      grid-column-end: 1;
+      grid-row-start: 1;
+      grid-row-end: 1;
+  }
+  .item-2 {
+      grid-column-start: 2;
+      grid-column-end: 2;
+      grid-row-start: 1;
+      grid-row-end: 1;
+  }
+  .item-2 {
+      grid-column-start: 3;
+      grid-column-end: 3;
+      grid-row-start: 1;
+      grid-row-end: 1;
+  }
+
 </style>
 <script>
 </script>
@@ -33,6 +64,12 @@
 <p>Paste a YouTube Video ID into the ID field and click <em>Get Info</em>. The application will download the avaliable audio and video files for this video. Next select all the different types of files you want to download and the application will download all the files you want.</p>
 <p><b>PUT YOUTUBE ID HERE</b></p>
 <p><input id="ytid" type="text"> <input id="checkid" type="button" value="Check ID"></p>
+<div class="container">
+    <div class="item item-1">herp</div>
+    <div class="item item-2">derp</div>
+    <div class="item item-3">jerp</div>
+</div>
+
 
 <!--
 

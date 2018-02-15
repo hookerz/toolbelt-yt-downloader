@@ -6,42 +6,44 @@ let _ = require('lodash');
 let checkIDButton = null;
 let idField = null;
 let downloader = require('./downloader');
-
 plugin.onload = init; // triggered when Toolbelt is ready to display this plugin.
 function init() {
-  console.log('PLUGIN plugin init', process.cwd(), plugin.path);
-  renderInterface();
-  //setupCheckbox();
-  plugin.init(); // We've rendered our elements, now to tell Toolbelt the plugin is ready to be displayed.
-  //openFrame();
+    console.log('PLUGIN plugin init', process.cwd(), plugin.path);
+    renderInterface();
+    //setupCheckbox();
+    plugin.init(); // We've rendered our elements, now to tell Toolbelt the plugin is ready to be displayed.
+    //openFrame();
 }
 
 function renderInterface() {
-  // Plugins have access to the DOM of the index.html file this script was loaded in.
-
+    // Plugins have access to the DOM of the index.html file this script was loaded in.
     checkIDButton = document.getElementById('checkid');
-    idField  = document.getElementById('ytid');
+    idField = document.getElementById('ytid');
     checkIDButton.addEventListener('click', checkIDClickHandler);
 }
 
+function checkIDClickHandler(e) {
+    console.log('!!!', idField.value)
+    if (downloader.ytdl.validateID(idField.value)) {
+        downloader.getInfo(idField.value)
+            .then(buildMultiSelectList)
+    } else {
+        // handle error here
+    }
+}
 
-function checkIDClickHandler (e){
-
+function buildMultiSelectList (metaData) {
 
 
 }
 
-
-
-
-
 function openFrame() {
-  let frame = plugin.createFrame('Plugin Template Frame', {
-    width: 300,
-    height: 250,
-    x: plugin.frame.width - 5,
-    y: plugin.frame.y
-  });
-  frame.document.body.innerHTML = 'Hello World!';
+    let frame = plugin.createFrame('Plugin Template Frame', {
+        width: 300,
+        height: 250,
+        x: plugin.frame.width - 5,
+        y: plugin.frame.y
+    });
+    frame.document.body.innerHTML = 'Hello World!';
 }
 
