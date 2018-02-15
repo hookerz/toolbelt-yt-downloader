@@ -35,7 +35,7 @@ let getInfo = function (ytID) {
             })
     })
 };
-let multiDownload = function (info, namePrefix, formatArray, destinationDir, responseCallback, progressCallback, videoEndCallback) {
+let multiDownload = function (info, namePrefix, formatArray, destinationDir, loggingDiv) {
     return new Promise((resolve, reject) => {
         function run() {
             let item = formatArray.pop();
@@ -90,10 +90,7 @@ if (process.env.SOLOTEST === 'true') {
                 infoObject.videoFormats[0],
                 infoObject.combinedFormats[0],
             ];
-           return multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), () => {
-            }, (chunkLength, downloaded, total) => {
-            }, () => {
-            });
+           return multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), null);
         })
         .then (()=>{
             console.log ('all files done')

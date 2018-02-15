@@ -26,42 +26,47 @@ function renderInterface() {
     checkIDButton = document.getElementById('checkid');
     idField = document.getElementById('ytid');
     checkIDButton.addEventListener('click', checkIDClickHandler);
-
-
     folderFinder = document.getElementById('folderFinder');
     folderFinder.addEventListener('change', updateFolderList);
-
-
     versionSelect = document.getElementById('versionSelect');
-
-    startDownloadButton= document.getElementById('startDownload');
+    startDownloadButton = document.getElementById('startDownload');
     startDownloadButton.addEventListener('click', checkAndRun);
-
     outputLog = document.getElementById('outputLog');
 }
 
-
 function checkAndRun() {
-
-console.log ('check and run');
-
-    if (data ===null){
-        console.warn (' NO META DATA');
-        outputLog.innerHTML ="Please provide a valid YouTube ID Before Proceeding";
+    console.log('check and run');
+    if (data === null) {
+        console.warn(' NO META DATA');
+        outputLog.innerHTML = "Please provide a valid YouTube ID Before Proceeding";
         return;
     }
-    if (folderPath ===null){
-        console.warn (' NO Folder');
-        outputLog.innerHTML ="Please Choose An Output Folder";
+    if (folderPath === null) {
+        console.warn(' NO Folder');
+        outputLog.innerHTML = "Please Choose An Output Folder";
         return;
     }
-
-    if (versionSelect.selectedOptions.length ===0){
-        console.warn (' NO Options Checked');
-        outputLog.innerHTML ="Please Choose At Least 1 Option For Download";
+    let selected = _.map(versionSelect.selectedOptions, (value) => {
+        return value.value;
+    });
+    if (selected.length === 0) {
+        console.warn(' NO Options Checked');
+        outputLog.innerHTML = "Please Choose At Least 1 Option For Download";
         return;
-
     }
+    let all = data.combinedFormats.concat(data.videoFormats).concat(data.audioFormats);
+    let items = [];
+    // go through each selected item and find it in the combined array
+    _.forEach(selected, (value) => {
+        items=  items.concat(_.filter(all, (item) => {
+
+            console.log (item.url === value);
+
+            return item.url === value;
+        }));
+    });
+    console.log('RUN DOWNLOADER', items, idField.value, folderPath);
+    downloader.multiDownload(data.metaData, idField.value, items, folderPath, outputLog)
 }
 
 function updateFolderList(e) {
@@ -70,7 +75,7 @@ function updateFolderList(e) {
 }
 
 function checkIDClickHandler(e) {
-    console.log('!!!', idField.value)
+    console.log('!!!', idField.value);
     if (downloader.ytdl.validateID(idField.value)) {
         downloader.getInfo(idField.value)
             .then(buildMultiSelectList)
@@ -79,11 +84,8 @@ function checkIDClickHandler(e) {
     }
 }
 
-function buildMultiSelectList (metaData) {
-
-
+function buildMultiSelectList(metaData) {
     data = metaData;
-
     while (versionSelect.firstChild) {
         versionSelect.removeChild(versionSelect.firstChild);
     }
@@ -93,15 +95,12 @@ function buildMultiSelectList (metaData) {
         item.innerText = `VIDEO AND AUDIO ${value.resolution} ${value.audioEncoding} ${value.audioBitrate} ${value.container}`
         versionSelect.appendChild(item)
     });
-    _.forEach(metaData.videoFormats, (value)=>{
-
+    _.forEach(metaData.videoFormats, (value) => {
         let item = document.createElement("option");
-        item.value=value.url;
+        item.value = value.url;
         item.innerText = `VIDEO ONLY ${value.resolution} ${value.container}`;
-        versionSelect.appendChild (item)
-
+        versionSelect.appendChild(item)
     })
-
     _.forEach(metaData.audioFormats, (value) => {
         let item = document.createElement("option");
         item.value = value.url;
