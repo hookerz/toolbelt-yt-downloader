@@ -7,9 +7,11 @@ let downloader = require('./downloader');
 let checkIDButton = null;
 let idField = null;
 let folderFinder = null;
-let folderPath = '';
-
+let folderPath = null;
+let data = null;
 let versionSelect = null;
+let startDownloadButton = null;
+let outputLog = null;
 plugin.onload = init; // triggered when Toolbelt is ready to display this plugin.
 function init() {
     console.log('PLUGIN plugin init', process.cwd(), plugin.path);
@@ -30,10 +32,37 @@ function renderInterface() {
     folderFinder.addEventListener('change', updateFolderList);
 
 
-    versionSelect = document.getElementById('versionSelect')
+    versionSelect = document.getElementById('versionSelect');
+
+    startDownloadButton= document.getElementById('startDownload');
+    startDownloadButton.addEventListener('click', checkAndRun);
+
+    outputLog = document.getElementById('outputLog');
 }
 
 
+function checkAndRun() {
+
+console.log ('check and run');
+
+    if (data ===null){
+        console.warn (' NO META DATA');
+        outputLog.innerHTML ="Please provide a valid YouTube ID Before Proceeding";
+        return;
+    }
+    if (folderPath ===null){
+        console.warn (' NO Folder');
+        outputLog.innerHTML ="Please Choose An Output Folder";
+        return;
+    }
+
+    if (versionSelect.selectedOptions.length ===0){
+        console.warn (' NO Options Checked');
+        outputLog.innerHTML ="Please Choose At Least 1 Option For Download";
+        return;
+
+    }
+}
 
 function updateFolderList(e) {
     console.log("PLUGIN", folderFinder.files[0].path);
@@ -52,6 +81,8 @@ function checkIDClickHandler(e) {
 
 function buildMultiSelectList (metaData) {
 
+
+    data = metaData;
 
     while (versionSelect.firstChild) {
         versionSelect.removeChild(versionSelect.firstChild);
