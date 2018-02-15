@@ -3,9 +3,13 @@ let fs = require('fs');
 let path = require('path');
 let process = require('process');
 let _ = require('lodash');
+let downloader = require('./downloader');
 let checkIDButton = null;
 let idField = null;
-let downloader = require('./downloader');
+let folderFinder = null;
+let folderPath = '';
+
+let versionSelect = null;
 plugin.onload = init; // triggered when Toolbelt is ready to display this plugin.
 function init() {
     console.log('PLUGIN plugin init', process.cwd(), plugin.path);
@@ -20,6 +24,20 @@ function renderInterface() {
     checkIDButton = document.getElementById('checkid');
     idField = document.getElementById('ytid');
     checkIDButton.addEventListener('click', checkIDClickHandler);
+
+
+    folderFinder = document.getElementById('folderFinder');
+    folderFinder.addEventListener('change', updateFolderList);
+
+
+    versionSelect = document.getElementById('versionSelect')
+}
+
+
+
+function updateFolderList(e) {
+    console.log("PLUGIN", folderFinder.files[0].path);
+    folderPath = folderFinder.files[0].path;
 }
 
 function checkIDClickHandler(e) {
@@ -35,6 +53,30 @@ function checkIDClickHandler(e) {
 function buildMultiSelectList (metaData) {
 
 
+    while (versionSelect.firstChild) {
+        versionSelect.removeChild(versionSelect.firstChild);
+    }
+    _.forEach(metaData.combinedFormats, (value) => {
+        let item = document.createElement("option");
+        item.value = value.url;
+        item.innerText = `VIDEO AND AUDIO ${value.resolution} ${value.audioEncoding} ${value.audioBitrate} ${value.container}`
+        versionSelect.appendChild(item)
+    });
+    _.forEach(metaData.videoFormats, (value)=>{
+
+        let item = document.createElement("option");
+        item.value=value.url;
+        item.innerText = `VIDEO ONLY ${value.resolution} ${value.container}`;
+        versionSelect.appendChild (item)
+
+    })
+
+    _.forEach(metaData.audioFormats, (value) => {
+        let item = document.createElement("option");
+        item.value = value.url;
+        item.innerText = `AUDIO ONLY  ${value.audioEncoding} ${value.audioBitrate} ${value.container}`
+        versionSelect.appendChild(item)
+    });
 }
 
 function openFrame() {
