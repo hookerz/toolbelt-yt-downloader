@@ -58,10 +58,8 @@ function checkAndRun() {
     let items = [];
     // go through each selected item and find it in the combined array
     _.forEach(selected, (value) => {
-        items=  items.concat(_.filter(all, (item) => {
-
-            console.log (item.url === value);
-
+        items = items.concat(_.filter(all, (item) => {
+            console.log(item.url === value);
             return item.url === value;
         }));
     });
