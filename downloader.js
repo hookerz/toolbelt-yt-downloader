@@ -43,7 +43,7 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, log
             let item = formatArray.pop();
             let starttime = null;
             let filname = `${namePrefix}_${item.resolution}_${item.bitrate}_${item.audioEncoding}_${item.audioBitrate}_${Date.now()}.${item.container}`;
-            filname = filname.replace(/_null/g,'')
+            filname = filname.replace(/_null/g, '')
             let output = path.resolve(destinationDir, filname);
             let video = ytdl.downloadFromInfo(info, {
                 format: item
@@ -57,25 +57,22 @@ let multiDownload = function (info, namePrefix, formatArray, destinationDir, log
             video.on('progress', (chunkLength, downloaded, total) => {
                 const floatDownloaded = downloaded / total;
                 const downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
-
-
-                let  s11=`Downloading: ${filname}  file ${totalToRun-formatArray.length} of ${totalToRun} `;
-                loggingDiv.innerHTML = s11+ '<br>';
-                console.log(s11);
-
+                let s11 = `Downloading: ${filname}  file ${totalToRun - formatArray.length} of ${totalToRun} `;
+                loggingDiv.innerHTML = s11 + '<br>';
+                //  console.log(s11);
                 let s1 = `${(floatDownloaded * 100).toFixed(2)}% downloaded`;
-                console.log(s1);
+                // console.log(s1);
                 loggingDiv.innerHTML += s1 + '<br>';
                 let s2 = `(${(downloaded / 1024 / 1024).toFixed(2)}MB of ${(total / 1024 / 1024).toFixed(2)}MB)`;
-                console.log(s2);
+                // console.log(s2);
                 loggingDiv.innerHTML += s2 + '<br>';
                 let s3 = `running for: ${downloadedMinutes.toFixed(2)}minutes`;
-                console.log(s3);
+                // console.log(s3);
                 loggingDiv.innerHTML += s3 + '<br>';
                 let s4 = `estimated time left: ${(downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)}minutes `;
-                console.log(s4);
+                // console.log(s4);
                 loggingDiv.innerHTML += s4 + '<br><br>';
-                console.log(' ')
+                // console.log(' ')
             });
             video.on('end', () => {
                 console.log('\n\n');
