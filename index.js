@@ -12,6 +12,7 @@ let data = null;
 let versionSelect = null;
 let startDownloadButton = null;
 let outputLog = null;
+let blocker = null;
 plugin.onload = init; // triggered when Toolbelt is ready to display this plugin.
 function init() {
     console.log('PLUGIN plugin init', process.cwd(), plugin.path);
@@ -32,6 +33,12 @@ function renderInterface() {
     startDownloadButton = document.getElementById('startDownload');
     startDownloadButton.addEventListener('click', checkAndRun);
     outputLog = document.getElementById('outputLog');
+
+    blocker = document.getElementById('blocker');
+    blocker.addEventListener ('click',(e)=>{
+        e.stopPropagation();
+
+    })
 }
 
 function checkAndRun() {
@@ -63,8 +70,15 @@ function checkAndRun() {
             return item.url === value;
         }));
     });
+    blocker.style.display='block';
+
     console.log('RUN DOWNLOADER', items, idField.value, folderPath);
     downloader.multiDownload(data.metaData, idField.value, items, folderPath, outputLog)
+        .then (()=>{
+
+            blocker.style.display='none';
+
+        })
 }
 
 function updateFolderList(e) {
