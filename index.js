@@ -77,13 +77,21 @@ function checkIDClickHandler(e) {
     if (downloader.ytdl.validateID(idField.value)) {
         downloader.getInfo(idField.value)
             .then(buildMultiSelectList)
+            .catch (err=>{
+
+                console.log('!!! YT ID ERROR', err.message);
+                outputLog.innerHTML =`YT ID ERROR `+err.message;
+
+            })
     } else {
-        // handle error here
+        outputLog.innerHTML =`YT ID ERROR: Your ID is not valid`;
     }
 }
 
 function buildMultiSelectList(metaData) {
     data = metaData;
+    outputLog.innerHTML =``;
+
     while (versionSelect.firstChild) {
         versionSelect.removeChild(versionSelect.firstChild);
     }

@@ -33,6 +33,12 @@ let getInfo = function (ytID) {
                 }();
                 resolve(ret)
             })
+            .catch (err =>{
+
+                reject (err.message);
+
+
+            })
     })
 };
 let multiDownload = function (info, namePrefix, formatArray, destinationDir, loggingDiv) {
@@ -99,7 +105,8 @@ module.exports = {
 };
 if (process.env.SOLOTEST === 'true') {
     console.log('!!! HELLO WORLD');
-    getInfo('YE7VzlLtp-4')
+    //getInfo('YE7VzlLtp-4')
+    getInfo('YE7Vzlp-4')
         .then(infoObject => {
             let forArray = [
                 infoObject.audioFormats[0],
@@ -107,6 +114,10 @@ if (process.env.SOLOTEST === 'true') {
                 infoObject.combinedFormats[0],
             ];
             return multiDownload(infoObject.metaData, 'herp', forArray, process.cwd(), null);
+        })
+        .catch(err =>{
+            console.log ('PROMISE REJECTED')
+
         })
         .then(() => {
             console.log('all files done')
