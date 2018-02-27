@@ -18,17 +18,20 @@ let getInfo = function (ytID) {
                 ret.metaData = info;
                 ret.audioFormats = function () {
                     return _.filter(ytdl.filterFormats(info.formats, 'audioonly'), function (item) {
-                        return item.audioEncoding === 'aac';
+                        return true
                     })
                 }();
                 ret.videoFormats = function () {
                     return _.filter(ytdl.filterFormats(info.formats, 'videoonly'), function (item) {
-                        return item.encoding === 'H.264';
+                        return true
                     })
                 }();
                 ret.combinedFormats = function () {
                     return _.filter(ytdl.filterFormats(info.formats, 'audioandvideo'), function (item) {
-                        return item.encoding === 'H.264';
+
+                        console.log (item);
+
+                        return true
                     })
                 }();
                 resolve(ret)
@@ -108,6 +111,7 @@ if (process.env.SOLOTEST === 'true') {
     //getInfo('YE7VzlLtp-4')
     getInfo('YE7Vzlp-4')
         .then(infoObject => {
+            return;
             let forArray = [
                 infoObject.audioFormats[0],
                 infoObject.videoFormats[0],

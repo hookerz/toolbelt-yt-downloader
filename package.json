@@ -1,7 +1,7 @@
 {
   "name": "toolbelt-yt-downloader",
   "title": "YouTube Video Downloader",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Helps Download Videos From YouTube",
   "main": "index.html",
   "dependencies": {
