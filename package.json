@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hookerz/toolbelt-static-html5-wrapper.git"
+    "url": "git+https://github.com/hookerz/toolbelt-yt-downloader"
   },
   "author": "chris <chris@byhook.com> (https://www.byhook.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hookerz/toolbelt-static-html5-wrapper/issues"
+    "url": "https://github.com/hookerz/toolbelt-yt-downloader/issues"
   },
-  "homepage": "https://github.com/hookerz/toolbelt-static-html5-wrapper#readme"
+  "homepage": "https://github.com/hookerz/toolbelt-yt-downloader#readme"
 }
